@@ -91,7 +91,6 @@ impl_locking_method!(
     unimplemented!("Not implemented in parking_lot")
 );
 
-
 #[cfg(test)]
 mod test {
     use crate::*;

@@ -7,9 +7,9 @@
 //! obtain a lock, possibly with timeouts, allow a thread to lock a single RwLock multiple
 //! times. These are (zero-cost) abstracted here.
 
+pub use parking_lot::{Mutex, MutexGuard, RwLock, RwLockReadGuard, RwLockWriteGuard};
 /// reexport for convenience
 pub use std::time::{Duration, Instant};
-pub use parking_lot::{RwLock, RwLockReadGuard, RwLockWriteGuard};
 
 /// Marker for blocking locks,
 /// waits until the lock becomes available.
@@ -28,3 +28,5 @@ pub struct Recursive<T>(pub T);
 mod rwlock_method;
 pub use rwlock_method::*;
 
+mod mutex_method;
+pub use mutex_method::*;
