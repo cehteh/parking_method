@@ -7,7 +7,10 @@
 //! obtain a lock, possibly with timeouts, allow a thread to lock a single RwLock multiple
 //! times. These are (zero-cost) abstracted here.
 
-pub use parking_lot::{Mutex, MutexGuard, RwLock, RwLockReadGuard, RwLockWriteGuard};
+pub use parking_lot::{
+    Mutex, MutexGuard, ReentrantMutex, ReentrantMutexGuard, RwLock, RwLockReadGuard,
+    RwLockWriteGuard,
+};
 /// reexport for convenience
 pub use std::time::{Duration, Instant};
 
@@ -30,3 +33,6 @@ pub use rwlock_method::*;
 
 mod mutex_method;
 pub use mutex_method::*;
+
+mod reentrant_mutex_method;
+pub use reentrant_mutex_method::*;

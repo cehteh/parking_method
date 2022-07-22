@@ -1,7 +1,7 @@
 use crate::*;
 
 /// Trait for implementing read/write flavors on Mutex.
-/// Note that there are no Recursive locks in Mutexes, use ReentrantMutex for that.
+/// Note that there are no Recursive locks in Mutex, use ReentrantMutex for that.
 pub trait MutexMethod<'a, V> {
     /// Obtain a lock on a mutex. Blocking locks are infallible and always return a 'Some()' variant.
     fn lock(&self, mutex: &'a Mutex<V>) -> Option<MutexGuard<'a, V>>;
