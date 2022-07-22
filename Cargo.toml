@@ -1,0 +1,16 @@
+[package]
+name = "parking_method"
+version = "0.1.0"
+edition = "2021"
+authors = ["Christian Thäter <ct@pipapo.org>"]
+description = "Obtain parking_lot locks by policy objects"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/cehteh/parking_method.git"
+keywords = ["parking_lot", "locking"]
+
+[dependencies]
+parking_lot = ">= 0.11, <=0.13"
+
+[badges]
+maintenance = { status = "actively-developed" }
+
