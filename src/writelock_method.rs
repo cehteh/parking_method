@@ -1,17 +1,17 @@
 use crate::*;
 
 /// Trait for implementing write flavors on RwLocks.
-pub trait WriteLockMethod<'a, V> {
+pub trait WriteLockMethod {
     /// Obtain a write lock. Blocking locks are infallible and always return a 'Some()' variant.
-    fn write(&self, rwlock: &'a RwLock<V>) -> Option<RwLockWriteGuard<'a, V>>;
+    fn write<'a, V>(&self, rwlock: &'a RwLock<V>) -> Option<RwLockWriteGuard<'a, V>>;
 }
 
 macro_rules! impl_locking_method {
     ($policy:ty, $write:expr) => {
-        impl<'a, V> WriteLockMethod<'a, V> for $policy {
+        impl WriteLockMethod for $policy {
             #[inline(always)]
             #[allow(unused_variables)]
-            fn write(&self, rwlock: &'a RwLock<V>) -> Option<RwLockWriteGuard<'a, V>> {
+            fn write<'a, V>(&self, rwlock: &'a RwLock<V>) -> Option<RwLockWriteGuard<'a, V>> {
                 #[allow(unused_macros)]
                 macro_rules! method {
                     () => {

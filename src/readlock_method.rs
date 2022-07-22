@@ -1,17 +1,17 @@
 use crate::*;
 
 /// Trait for implementing read flavors on RwLocks.
-pub trait ReadLockMethod<'a, V> {
+pub trait ReadLockMethod {
     /// Obtain a read lock. Blocking locks are infallible and always return a 'Some()' variant.
-    fn read(&self, rwlock: &'a RwLock<V>) -> Option<RwLockReadGuard<'a, V>>;
+    fn read<'a, V>(&self, rwlock: &'a RwLock<V>) -> Option<RwLockReadGuard<'a, V>>;
 }
 
 macro_rules! impl_locking_method {
-    ($policy:ty, $read:expr) => {
-        impl<'a, V> ReadLockMethod<'a, V> for $policy {
+    ($policy:ty, $read:expr $(, $as_write:expr)?) => {
+        impl ReadLockMethod for $policy {
             #[inline(always)]
             #[allow(unused_variables)]
-            fn read(&self, rwlock: &'a RwLock<V>) -> Option<RwLockReadGuard<'a, V>> {
+            fn read<'a, V>(&self, rwlock: &'a RwLock<V>) -> Option<RwLockReadGuard<'a, V>> {
                 #[allow(unused_macros)]
                 macro_rules! method {
                     () => {
