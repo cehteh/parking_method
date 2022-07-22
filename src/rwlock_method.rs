@@ -90,3 +90,72 @@ impl_locking_method!(
     lock!().try_read_recursive_until(method!().0),
     unimplemented!("Not implemented in parking_lot")
 );
+
+
+#[cfg(test)]
+mod test {
+    use crate::*;
+
+    #[test]
+    fn smoke() {
+        let rwlock = RwLock::new(String::from("test"));
+        assert_eq!(*RwLockMethod::read(&Blocking, &rwlock).unwrap(), "test");
+    }
+
+    #[test]
+    fn trylocks() {
+        let rwlock = RwLock::new(String::from("test"));
+
+        assert_eq!(*RwLockMethod::read(&TryLock, &rwlock).unwrap(), "test");
+        assert_eq!(
+            *RwLockMethod::read(&Duration::from_millis(100), &rwlock).unwrap(),
+            "test"
+        );
+        assert_eq!(
+            *RwLockMethod::read(&(Instant::now() + Duration::from_millis(100)), &rwlock).unwrap(),
+            "test"
+        );
+    }
+
+    #[test]
+    fn recursivelocks() {
+        let rwlock = RwLock::new(String::from("test"));
+
+        let guard = RwLockMethod::read(&Blocking, &rwlock).unwrap();
+
+        assert_eq!(
+            *RwLockMethod::read(&Recursive(Blocking), &rwlock).unwrap(),
+            "test"
+        );
+        assert_eq!(
+            *RwLockMethod::read(&Recursive(TryLock), &rwlock).unwrap(),
+            "test"
+        );
+        assert_eq!(
+            *RwLockMethod::read(&Recursive(Duration::from_millis(100)), &rwlock).unwrap(),
+            "test"
+        );
+        assert_eq!(
+            *RwLockMethod::read(
+                &Recursive(Instant::now() + Duration::from_millis(100)),
+                &rwlock
+            )
+            .unwrap(),
+            "test"
+        );
+
+        drop(guard);
+    }
+
+    #[test]
+    #[should_panic]
+    fn recursive_try_write_panics() {
+        let rwlock = RwLock::new(String::from("test"));
+
+        let guard = RwLockMethod::read(&Blocking, &rwlock).unwrap();
+
+        let _ = RwLockMethod::write(&Recursive(TryLock), &rwlock).unwrap();
+
+        drop(guard);
+    }
+}
