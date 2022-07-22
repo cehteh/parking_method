@@ -17,19 +17,19 @@ let rwlock = RwLock::new(String::from("test"));
 
 // Note the 2 following syntax forms are equivalent
 assert_eq!(*Blocking.read(&rwlock).unwrap(), "test");
-assert_eq!(*RwLockMethod::read(&Blocking, &rwlock).unwrap(), "test");
+assert_eq!(*ReadLockMethod::read(&Blocking, &rwlock).unwrap(), "test");
 
 assert_eq!(*TryLock.read(&rwlock).unwrap(), "test");
 
 let timeout = Duration::from_millis(100);
 
 assert_eq!(
-    *RwLockMethod::read(&timeout, &rwlock).unwrap(),
+    *ReadLockMethod::read(&timeout, &rwlock).unwrap(),
     "test"
 );
 
 assert_eq!(
-    *RwLockMethod::read(
+    *ReadLockMethod::read(
         &Recursive(Instant::now() + Duration::from_millis(100)),
         &rwlock).unwrap(),
     "test"

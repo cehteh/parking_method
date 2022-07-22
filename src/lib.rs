@@ -23,13 +23,13 @@ pub struct TryLock;
 
 /// Marker for recursive locking. Allows to obtain a read-lock multiple times by a single
 /// thread.
-///
-/// # Panics
-/// There are no try_write_recursive forms in parking_lot. Trying to call this will panic.
 pub struct Recursive<T>(pub T);
 
-mod rwlock_method;
-pub use rwlock_method::*;
+mod readlock_method;
+pub use readlock_method::*;
+
+mod writelock_method;
+pub use writelock_method::*;
 
 mod mutex_method;
 pub use mutex_method::*;
